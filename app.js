@@ -3,6 +3,7 @@ import {
   FIXTURES,
   PLAYERS,
   CUP_IMAGE_URL,
+  CUP_IMAGE_PREVIEW,
   teamByCode,
   computeWidget,
   formatTime,
@@ -61,9 +62,15 @@ function tzOffsetLabel(tz) {
   }
 }
 
+/* Asia/Calcutta is the old alias of Asia/Kolkata — collapse to one. */
+function normalizeTz(tz) {
+  return tz === "Asia/Calcutta" ? "Asia/Kolkata" : tz;
+}
+
 function initTimeZones() {
   const sel = document.getElementById("tzSelect");
-  const list = [...new Set([state.timeZone, ...COMMON_TZS])];
+  state.timeZone = normalizeTz(state.timeZone);
+  const list = [...new Set([state.timeZone, ...COMMON_TZS].map(normalizeTz))];
   sel.innerHTML = list
     .map((tz) => {
       const off = tzOffsetLabel(tz);
@@ -204,7 +211,7 @@ function renderWidget(el, now) {
   const result = computeWidget(now, { mode: state.mode, teamCode: state.teamCode }, FIXTURES, state.timeZone);
   const art =
     `<div class="wc-art">` +
-    `<img class="cup-img" src="${CUP_IMAGE_URL}" alt="World Cup" onerror="this.classList.add('hide')" />` +
+    `<img class="cup-img" src="${CUP_IMAGE_PREVIEW}" alt="World Cup" onerror="this.classList.add('hide')" />` +
     `</div>`;
 
   if (result.empty) {

@@ -105,10 +105,14 @@ export const PLAYERS = {
    This single link is hardcoded into every generated widget script,
    and the user can paste their own image URL in its place.
    ------------------------------------------------------------- */
-// Google Drive image: the "/file/d/<ID>/view" share link is converted to a
-// direct, hot-linkable URL (file must be shared "Anyone with the link").
+// Phone script uses this URL. Google Drive blocks BROWSER hot-linking but
+// Scriptable fetches it directly (a plain GET), so it works on the phone.
 export const CUP_IMAGE_URL =
   "https://lh3.googleusercontent.com/d/1GY96T11UMM3P6fz_obDYVdlHZt8pDxXj=w1000";
+
+// The website preview can't hot-link Drive, so it uses a local copy of the
+// same image (downloaded into ./assets). Always loads, no Drive throttling.
+export const CUP_IMAGE_PREVIEW = "assets/cup.png";
 
 /* Resolve a Wikipedia article title to a Commons image URL. */
 export async function wikiImage(title, size = 600) {
